@@ -1,6 +1,14 @@
+""" Reversi
+
+Runs Reversi in the command line that can be played as 2-player
+or 1-player VS CPU.
+"""
+__author__ = 'Daniel Yuen'
+
 import copy
 
 def new_board():
+    """Creates a new board to be played on."""
     board = [[0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0],
@@ -12,6 +20,10 @@ def new_board():
     return board
 
 def score(board):
+    """
+    Calculates the score of both players based on the
+    current state of the board
+    """
     s1 = 0
     s2 = 0
     for i in range(8):
@@ -23,6 +35,7 @@ def score(board):
     return (s1,s2)
     
 def print_board(board):
+    """Prints out current board state to the command line""" 
     print('   +---+---+---+---+---+---+---+---+')
     for i in range(8): 
         print('',(i+1), end = ' '), 
@@ -38,16 +51,20 @@ def print_board(board):
     print('   | a | b | c | d | e | f | g | h')
 
 def on_board(y,x):
-    #recieves a position on the board and returns
-    #False if out of bounds
+    """
+    Recieves a position on the board and returns False if out
+    of bounds
+    """
     if y >= 0 and y <= 7 and x >= 0 and x <= 7:
         return True
     else:
         return False
 
 def enclosing(board,player,pos,dir):
-    #returns True if a move can be made in that
-    #position, False otherwise
+    """
+    Returns True if a move can be made in that position,
+    False otherwise
+    """
 
     #converts tuples to integers
     y = pos[0] 
@@ -85,8 +102,10 @@ def enclosing(board,player,pos,dir):
         return False 
         
 def valid_pos(board,player,pos):
-    #returns True if a valid move can be made in a position
-    #and False otherwise
+    """
+    Returns True if a valid move can be made in a position
+    and False otherwise
+    """
 
     #checks in all directions
     for dir in [(1,0),(0,1),(1,1),(-1,0),(0,-1),(-1,-1),(-1,1),(1,-1)]: 
@@ -96,8 +115,10 @@ def valid_pos(board,player,pos):
             continue
             
 def valid_moves(board,player):
-    #returns a list containing valid moves that can be made
-    #by a player
+    """
+    Returns a list containing valid moves that can be made
+    by a player
+    """
     
     list = []
     
@@ -110,9 +131,11 @@ def valid_moves(board,player):
     return list
 
 def valid_dir(board,player,pos):
-    #returns a list containing valid direction(s) of a valid
-    #move similar to valid_pos but instead returns valid directions
-    #instead of Boolean
+    """
+    Returns a list containing valid direction(s) of a valid
+    move similar to valid_pos but instead returns valid directions
+    instead of Boolean
+    """
     
     list_dir = [] 
     
@@ -124,8 +147,10 @@ def valid_dir(board,player,pos):
     return list_dir
         
 def flipstones(board,player,pos,dir):
-    #returns a board with opposing stones flipped according
-    #to current player's move
+    """
+    Returns a board with opposing stones flipped according
+    to current player's move
+    """
     
     y = pos[0] 
     x = pos[1]
@@ -152,8 +177,10 @@ def flipstones(board,player,pos,dir):
     return board
     
 def next_state(board,player,pos):
-    #returns the next board configuration resulting from the current
-    #player's move and the configuration (1 or 2) of the next player
+    """
+    Returns the next board configuration resulting from the current
+    player's move and the configuration (1 or 2) of the next player
+    """
     
     if valid_pos(board,player,pos) == True:
         y = pos[0]
@@ -179,8 +206,10 @@ def next_state(board,player,pos):
         return next_board,next_player
         
 def position(string):
-    #changes player input into a list of lists form,
-    #returns None if otherwise
+    """
+    Changes player input into a list of lists form,
+    returns None otherwise
+    """
 
     letters = ['a','b','c','d','e','f','g','h']
     num = [0,1,2,3,4,5,6,7]
@@ -208,20 +237,21 @@ def position(string):
         return None
 
 def end_game(board):
-    #returns True if there are no more moves to be made by both players
+    """returns True if there are no more moves to be made by both players"""
     if valid_moves(board,1) == [] and valid_moves(board,2) == []:
         return True
     else:
         return False
 
 def player_check(board,player):
-    #returns False if a player has no more moves to be made
+    """Returns False if a player has no more moves to be made"""
     if valid_moves(board,player) == []:
         return False
     else:
         return True
                 
 def run_two_players():
+    """Runs the game for two players"""
     board = new_board() 
     next_player = 1
 
@@ -281,8 +311,10 @@ def run_two_players():
         print('Player 2 wins!')
 
 def duplicate_board(board):
-    #creates a duplicate board to be altered, since using the
-    #original board will change all lists referencing the original board
+    """
+    Creates a duplicate board to be altered, since using the
+    original board will change all lists referencing the original board
+    """
 
     duplicate = new_board()
 
@@ -292,8 +324,10 @@ def duplicate_board(board):
     return duplicate
     
 def best_choice(board,player):
-    #returns the position for the first greatest score
-    #possible for a certain turn
+    """
+    Returns the position for the first greatest score
+    possible for a certain turn
+    """
 
     scores_list = []
     moves_list = []
@@ -317,7 +351,7 @@ def best_choice(board,player):
     return pos
 
 def location(pos):
-    #returns a computer-readable coordinate into a human-readable form
+    """Returns a computer-readable coordinate into a human-readable form"""
 
     letters = ['a','b','c','d','e','f','g','h']
     num = [0,1,2,3,4,5,6,7]
@@ -333,7 +367,10 @@ def location(pos):
     return y,str(x)
              
 def run_single_player():
-    #where Player 1 is a human and Player 2 is the computer
+    """
+    Runs the game for single player vs CPU
+    where Player 1 is a human and Player 2 is the computer
+    """
 
     board = new_board()
     player = 1
@@ -407,4 +444,17 @@ def run_single_player():
         print('Tie!')
     else:
         print('Computer wins!')
+
+
+if __name__ == '__main__':
+    game=input('Would you like to play 2-player or vs CPU? (1/2)\n')
+    while game != '1' and game != '2':
+        game=input('Please input a valid response. "\
+        \nWould you like to play two players or vs CPU? (1/2)\n')
+
+    if game == '1':
+        run_two_players()
+    elif game == '2':
+        run_single_player()
+    
 
